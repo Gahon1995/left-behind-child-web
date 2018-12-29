@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container" align="center">
+  <div class="app-container">
     <el-table
       v-loading="listLoading"
       :data="list"
@@ -30,14 +30,13 @@
       <el-table-column label="需求审核" width="110" align="center">
         <template slot-scope="scope">
           <!-- v-if="scope.row.status === 0" -->
-          <el-button
+          <!-- <el-button
             :type="scope.row.status | statusColorFilter"
             size="small"
-            @click="handleEdit(scope.row)">{{ scope.row.status | statusNameFilter }}</el-button>
-            <!-- <el-tag
-            v-else
+            @click="handleEdit(scope.row)">{{ scope.row.status | statusNameFilter }}</el-button> -->
+          <el-tag
             :type="scope.row.status | statusColorFilter"
-            size="small">{{ scope.row.status | statusNameFilter }}</el-tag> -->
+            size="small">{{ scope.row.status | statusNameFilter }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="需求审核说明" width="110" align="left">
@@ -58,14 +57,13 @@
       <el-table-column label="帮扶审核" width="110" align="center">
         <template slot-scope="scope">
           <!-- v-if="scope.row.helpState === 0" -->
-          <el-button
+          <!-- <el-button
             :type="scope.row.helpState | statusColorFilter"
             size="small"
-            @click="handleEdit(scope.row)">{{ scope.row.helpState | statusNameFilter }}</el-button>
-            <!-- <el-tag
-            v-else
+            @click="handleEdit(scope.row)">{{ scope.row.helpState | statusNameFilter }}</el-button> -->
+          <el-tag
             :type="scope.row.helpState | statusColorFilter"
-            size="small">{{ scope.row.helpState | statusNameFilter }}</el-tag> -->
+            size="small">{{ scope.row.helpState | statusNameFilter }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="帮扶审核说明" width="110" align="left">
@@ -96,40 +94,51 @@
     <pagination v-show="total / listQuery.size > 1" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="fetchDemads"/>
 
     <el-dialog :visible.sync="formVisible" title="审核">
-      <el-form ref="dataForm" :model="temp" :rules="rules" label-width="100px">
-        <el-form-item label="发起人:" align="left">
+      <el-form ref="dataForm" :model="temp" :rules="rules" label-width="90px">
+        <el-form-item label="发起人:">
           <template> {{ temp.owner }}</template>
         </el-form-item>
-        <el-form-item label="服务点:" align="left">
+        <el-form-item label="服务点:">
           <template> {{ temp.pointName }}</template>
         </el-form-item>
-        <el-form-item label="需求:" align="left">
+        <el-form-item label="需求:">
           <template> {{ temp.detail }}</template>
         </el-form-item>
         <template v-if="temp.status !== -90">
-          <el-form-item v-model="temp.status" label="需求审核:" align="left" prop="status">
+          <el-form-item v-model="temp.status" label="需求审核:" prop="status">
             <el-radio-group v-model="temp.status" size="small">
               <el-radio :label="1" border> 通过 </el-radio>
               <el-radio :label="-1" border> 不通过 </el-radio>
+              <el-radio :label="0" border> 审核中 </el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="审核说明:" align="left">
-            <el-input v-model="temp.reviewApplyDetail"/>
+            <el-input
+              v-model="temp.reviewApplyDetail"
+              :autosize="{ minRows: 2, maxRows: 4}"
+              type="textarea"
+              placeholder="请输入内容"/>
           </el-form-item>
         </template>
-        <template v-if="temp.helpState !== -90">
+        <template v-if="temp.helpState !== -2">
           <el-form-item v-model="temp.helpState" label="帮扶审核:" align="left" prop="helpState">
             <el-radio-group v-model="temp.helpState" size="small">
               <el-radio :label="1" border> 通过 </el-radio>
               <el-radio :label="-1" border> 不通过 </el-radio>
+              <el-radio :label="0" border> 审核中 </el-radio>
+              <el-radio :label="-2" border> 清楚申请 </el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="审核说明:" align="left">
-            <el-input v-model="temp.reviewHelpDetail"/>
+            <el-input
+              v-model="temp.reviewHelpDetail"
+              :autosize="{ minRows: 2, maxRows: 4}"
+              type="textarea"
+              placeholder="请输入内容"/>
           </el-form-item>
         </template>
       </el-form>
-      <div>
+      <div align="center">
         <el-button @click="formVisible = false">取消</el-button>
         <el-button type="primary" @click="updateData()">确定</el-button>
       </div>
@@ -212,14 +221,15 @@ export default {
       this.$confirm('确定删除该需求?', '删除确认', {
         confirmButtonText: '确定',
         cancelButtonText: '取消',
-        type: 'warning'
+        type: 'warning',
+        center: true
       }).then(() => {
         deleteDemand(row.did).then(() => {
           this.$notify({
             title: '成功',
             message: '删除成功',
             type: 'success',
-            duration: 2000
+            duration: 1000
           })
           const index = this.list.indexOf(row)
           this.list.splice(index, 1)
@@ -252,7 +262,7 @@ export default {
               title: '成功',
               message: '更新成功',
               type: 'success',
-              duration: 2000
+              duration: 1000
             })
           }).catch(() => {
             this.formVisible = false

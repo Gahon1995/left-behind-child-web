@@ -35,19 +35,16 @@ export default new Router({
 
 // 异步挂载的路由
 // 动态需要根据权限加载的路由表
-// maintenance 代表维保单位typeid(1) m1(主管理员) m2(子管理员) m3(普通员工)
-// property 代表使用单位typeid(2) p1(主管理员) p2(子管理员) p3(普通员工)
-// government 代表质检单位typeid(3) g1(主管理员) g2(子管理员) g3(普通员工)
 export const asyncRouterMap = [
   {
     path: '/',
     component: Layout,
     name: 'index',
     redirect: '/dashboard',
-    meta: { roles: ['admin', 'user'] },
+    meta: { roles: ['admin'] },
     children: [{
       path: '/dashboard',
-      name: 'Dashboard',
+      // name: 'dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
@@ -55,7 +52,7 @@ export const asyncRouterMap = [
   {
     path: '/admin/users',
     component: Layout,
-    meta: { roles: ['admin', 'user'] },
+    meta: { roles: ['admin'] },
     children: [
       {
         path: '',
@@ -83,7 +80,7 @@ export const asyncRouterMap = [
   {
     path: '/admin/demands',
     component: Layout,
-    meta: { roles: ['admin', 'user'] },
+    meta: { roles: ['admin'] },
     children: [
       {
         path: '',
