@@ -6,26 +6,19 @@
       element-loading-text="Loading"
       border
       fit
-      highlight-current-row>
+      highlight-current-row
+    >
       <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          {{ scope.$index }}
-        </template>
+        <template slot-scope="scope">{{ scope.$index }}</template>
       </el-table-column>
       <el-table-column label="发起人" width="80" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.owner }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.owner }}</template>
       </el-table-column>
       <el-table-column label="服务点" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.pointName }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.pointName }}</template>
       </el-table-column>
       <el-table-column label="需求详情">
-        <template slot-scope="scope">
-          {{ scope.row.detail }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.detail }}</template>
       </el-table-column>
       <el-table-column label="需求审核" width="110" align="center">
         <template slot-scope="scope">
@@ -33,26 +26,21 @@
           <!-- <el-button
             :type="scope.row.status | statusColorFilter"
             size="small"
-            @click="handleEdit(scope.row)">{{ scope.row.status | statusNameFilter }}</el-button> -->
+          @click="handleEdit(scope.row)">{{ scope.row.status | statusNameFilter }}</el-button>-->
           <el-tag
             :type="scope.row.status | statusColorFilter"
-            size="small">{{ scope.row.status | statusNameFilter }}</el-tag>
+            size="small"
+          >{{ scope.row.status | statusNameFilter }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="需求审核说明" width="110" align="left">
-        <template slot-scope="scope">
-          {{ scope.row.reviewApplyDetail }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.reviewApplyDetail }}</template>
       </el-table-column>
       <el-table-column label="帮扶人" width="80" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.helper }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.helper }}</template>
       </el-table-column>
       <el-table-column label="申请详情">
-        <template slot-scope="scope">
-          {{ scope.row.helpDetail }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.helpDetail }}</template>
       </el-table-column>
       <el-table-column label="帮扶审核" width="110" align="center">
         <template slot-scope="scope">
@@ -60,16 +48,15 @@
           <!-- <el-button
             :type="scope.row.helpState | statusColorFilter"
             size="small"
-            @click="handleEdit(scope.row)">{{ scope.row.helpState | statusNameFilter }}</el-button> -->
+          @click="handleEdit(scope.row)">{{ scope.row.helpState | statusNameFilter }}</el-button>-->
           <el-tag
             :type="scope.row.helpState | statusColorFilter"
-            size="small">{{ scope.row.helpState | statusNameFilter }}</el-tag>
+            size="small"
+          >{{ scope.row.helpState | statusNameFilter }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="帮扶审核说明" width="110" align="left">
-        <template slot-scope="scope">
-          {{ scope.row.reviewHelpDetail }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.reviewHelpDetail }}</template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="注册时间" width="180">
         <template slot-scope="scope">
@@ -79,37 +66,37 @@
       </el-table-column>
       <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="handleEdit(scope.row)">审核</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row)">删除</el-button>
+          <el-button size="mini" type="primary" @click="handleEdit(scope.row)">审核</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total / listQuery.size > 1" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="fetchDemads"/>
+    <pagination
+      v-show="total / listQuery.size > 1"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.size"
+      @pagination="fetchDemads"
+    />
 
     <el-dialog :visible.sync="formVisible" title="审核">
       <el-form ref="dataForm" :model="temp" :rules="rules" label-width="90px">
         <el-form-item label="发起人:">
-          <template> {{ temp.owner }}</template>
+          <template>{{ temp.owner }}</template>
         </el-form-item>
         <el-form-item label="服务点:">
-          <template> {{ temp.pointName }}</template>
+          <template>{{ temp.pointName }}</template>
         </el-form-item>
         <el-form-item label="需求:">
-          <template> {{ temp.detail }}</template>
+          <template>{{ temp.detail }}</template>
         </el-form-item>
         <template v-if="temp.status !== -90">
           <el-form-item v-model="temp.status" label="需求审核:" prop="status">
             <el-radio-group v-model="temp.status" size="small">
-              <el-radio :label="1" border> 通过 </el-radio>
-              <el-radio :label="-1" border> 不通过 </el-radio>
-              <el-radio :label="0" border> 审核中 </el-radio>
+              <el-radio :label="1" border>通过</el-radio>
+              <el-radio :label="-1" border>不通过</el-radio>
+              <el-radio :label="0" border>审核中</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="审核说明:" align="left">
@@ -117,16 +104,17 @@
               v-model="temp.reviewApplyDetail"
               :autosize="{ minRows: 2, maxRows: 4}"
               type="textarea"
-              placeholder="请输入内容"/>
+              placeholder="请输入内容"
+            />
           </el-form-item>
         </template>
         <template v-if="temp.helpState !== -2">
           <el-form-item v-model="temp.helpState" label="帮扶审核:" align="left" prop="helpState">
             <el-radio-group v-model="temp.helpState" size="small">
-              <el-radio :label="1" border> 通过 </el-radio>
-              <el-radio :label="-1" border> 不通过 </el-radio>
-              <el-radio :label="0" border> 审核中 </el-radio>
-              <el-radio :label="-2" border> 清楚申请 </el-radio>
+              <el-radio :label="1" border>通过</el-radio>
+              <el-radio :label="-1" border>不通过</el-radio>
+              <el-radio :label="0" border>审核中</el-radio>
+              <el-radio :label="-2" border>清楚申请</el-radio>
             </el-radio-group>
           </el-form-item>
           <el-form-item label="审核说明:" align="left">
@@ -134,7 +122,8 @@
               v-model="temp.reviewHelpDetail"
               :autosize="{ minRows: 2, maxRows: 4}"
               type="textarea"
-              placeholder="请输入内容"/>
+              placeholder="请输入内容"
+            />
           </el-form-item>
         </template>
       </el-form>
@@ -143,7 +132,6 @@
         <el-button type="primary" @click="updateData()">确定</el-button>
       </div>
     </el-dialog>
-
   </div>
 </template>
 
@@ -242,7 +230,7 @@ export default {
           //   duration: 2000
           // })
         })
-      }).catch(() => {})
+      }).catch(() => { })
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {

@@ -3,20 +3,17 @@
     <el-table
       v-loading="listLoading"
       :data="list"
-      :default-sort = "{prop: 'id', order: 'enscending'}"
+      :default-sort="{prop: 'id', order: 'enscending'}"
       element-loading-text="Loading"
       border
       fit
-      highlight-current-row>
+      highlight-current-row
+    >
       <el-table-column align="center" label="ID" width="50" sortable prop="id">
-        <template slot-scope="scope">
-          {{ scope.row.pid }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.pid }}</template>
       </el-table-column>
       <el-table-column label="服务点名称" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.title }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.title }}</template>
       </el-table-column>
       <el-table-column label="负责人" width="90" align="center">
         <template slot-scope="scope">
@@ -24,39 +21,25 @@
         </template>
       </el-table-column>
       <el-table-column label="省份" width="80" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.province }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.province }}</template>
       </el-table-column>
       <el-table-column label="市" width="80" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.province }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.province }}</template>
       </el-table-column>
       <el-table-column label="区" width="80" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.district }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.district }}</template>
       </el-table-column>
       <el-table-column label="详细地址" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.address }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.address }}</template>
       </el-table-column>
       <el-table-column label="经度" width="80" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.lat }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.lat }}</template>
       </el-table-column>
       <el-table-column label="纬度" width="80" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.lng }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.lng }}</template>
       </el-table-column>
       <el-table-column label="服务点描述" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.describe }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.describe }}</template>
       </el-table-column>
       <el-table-column
         :filters="[{ text: '通过', value: 1 }, { text: '正在审核', value: 0 }, { text: '不通过', value: -1 }]"
@@ -65,15 +48,16 @@
         class-name="status-col"
         label="审核状态"
         width="110"
-        align="center">
+        align="center"
+      >
         <template slot-scope="scope">
-          <el-tag :type="scope.row.state | statusColorFilter">{{ scope.row.state | statusNameFilter }} </el-tag>
+          <el-tag
+            :type="scope.row.state | statusColorFilter"
+          >{{ scope.row.state | statusNameFilter }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="审核说明" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.detail }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.detail }}</template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" label="创建时间" width="200">
         <template slot-scope="scope">
@@ -83,27 +67,27 @@
       </el-table-column>
       <el-table-column label="操作" width="150" fixed="right">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="primary"
-            @click="handleEdit(scope.row)">审核</el-button>
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row)">删除</el-button>
+          <el-button size="mini" type="primary" @click="handleEdit(scope.row)">审核</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="total / listQuery.size > 1" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="fetchData" />
+    <pagination
+      v-show="total / listQuery.size > 1"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.size"
+      @pagination="fetchData"
+    />
 
     <el-dialog :visible.sync="formVisible" title="审核" width="600px">
       <el-form ref="dataForm" :model="temp" align="left" label-width="90px">
         <el-form-item v-model="temp.state" label="结果:" prop="state">
           <el-radio-group v-model="temp.state" size="small">
-            <el-radio :label="1" border> 通过 </el-radio>
-            <el-radio :label="-1" border> 不通过 </el-radio>
-            <el-radio :label="0" border> 审核中 </el-radio>
+            <el-radio :label="1" border>通过</el-radio>
+            <el-radio :label="-1" border>不通过</el-radio>
+            <el-radio :label="0" border>审核中</el-radio>
           </el-radio-group>
         </el-form-item>
         <el-form-item label="审核说明:">
@@ -111,7 +95,8 @@
             v-model="temp.detail"
             :autosize="{ minRows: 2, maxRows: 4}"
             type="textarea"
-            placeholder="请输入内容"/>
+            placeholder="请输入内容"
+          />
         </el-form-item>
       </el-form>
       <div>
@@ -220,7 +205,7 @@ export default {
           //   duration: 2000
           // })
         })
-      }).catch(() => {})
+      }).catch(() => { })
     },
     updateData() {
       this.$refs['dataForm'].validate((valid) => {

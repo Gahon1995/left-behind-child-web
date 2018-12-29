@@ -7,32 +7,25 @@
       border
       fit
       style="width: 1000px"
-      highlight-current-row>
+      highlight-current-row
+    >
       <el-table-column align="center" label="ID" width="80">
-        <template slot-scope="scope">
-          {{ scope.row.uid }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.uid }}</template>
       </el-table-column>
       <el-table-column label="姓名" width="110" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.username }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.username }}</template>
       </el-table-column>
       <el-table-column label="性别" width="80" align="center">
         <template slot-scope="scope">
-          <p v-if = "scope.row.sex" > 男 </p>
-          <p v-else > 女 </p>
+          <p v-if="scope.row.sex">男</p>
+          <p v-else>女</p>
         </template>
       </el-table-column>
       <el-table-column label="电话" width="200" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.phone }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.phone }}</template>
       </el-table-column>
       <el-table-column label="邮件" align="center">
-        <template slot-scope="scope">
-          {{ scope.row.email }}
-        </template>
+        <template slot-scope="scope">{{ scope.row.email }}</template>
       </el-table-column>
       <el-table-column align="center" prop="created_at" width="200" label="注册时间">
         <template slot-scope="scope">
@@ -42,15 +35,17 @@
       </el-table-column>
       <el-table-column label="操作" width="80">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="danger"
-            @click="handleDelete(scope.row)">删除</el-button>
+          <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total / listQuery.size > 1" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="fetchUsers" />
-
+    <pagination
+      v-show="total / listQuery.size > 1"
+      :total="total"
+      :page.sync="listQuery.page"
+      :limit.sync="listQuery.size"
+      @pagination="fetchUsers"
+    />
   </div>
 </template>
 
@@ -118,7 +113,7 @@ export default {
           //   duration: 2000
           // })
         })
-      }).catch(() => {})
+      }).catch(() => { })
     }
   }
 }
