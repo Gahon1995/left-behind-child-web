@@ -23,59 +23,8 @@ import Layout from '../views/layout/Layout'
 **/
 export const constantRouterMap = [
   { path: '/login', component: () => import('@/views/login/index'), hidden: true },
-  { path: '/404', component: () => import('@/views/404'), hidden: true },
-  { path: '/', component: () => import('@/views/public/index'), hidden: true }
-  // {
-  //   path: '/',
-  //   component: Layout,
-  //   redirect: '/dashboard',
-  //   name: 'Dashboard',
-  //   children: [{
-  //     path: 'dashboard',
-  //     component: () => import('@/views/dashboard/index'),
-  //     meta: { title: 'Dashboard', icon: 'dashboard' }
-  //   }]
-  // },
-
-  // {
-  //   path: '/user',
-  //   component: Layout,
-  //   redirect: '/user/index',
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'usersinfo1',
-  //       component: () => import('@/views/userinfo/index'),
-  //       meta: { title: '用户信息1', icon: 'peoples' }
-  //     }
-  //   ]
-  // }
-  // {
-  //   path: '/points',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'points',
-  //       component: () => import('@/views/point/index'),
-  //       meta: { title: '服务点信息', icon: 'international' }
-  //     }
-  //   ]
-  // },
-
-  // {
-  //   path: '/demands',
-  //   component: Layout,
-  //   children: [
-  //     {
-  //       path: 'index',
-  //       name: 'demands',
-  //       component: () => import('@/views/demands/index'),
-  //       meta: { title: '需求信息列表', icon: 'documentation' }
-  //     }
-  //   ]
-  // },
-  // { path: '*', redirect: '/404', hidden: true }
+  { path: '/404', component: () => import('@/views/404'), hidden: true }
+  // { path: '/', component: () => import('@/views/public/index'), hidden: true }
 ]
 
 export default new Router({
@@ -91,25 +40,25 @@ export default new Router({
 // government 代表质检单位typeid(3) g1(主管理员) g2(子管理员) g3(普通员工)
 export const asyncRouterMap = [
   {
-    path: '/dashboard',
+    path: '/',
     component: Layout,
-    name: 'Dashboard',
-    redirect: '/dashboard/index',
+    name: 'index',
+    redirect: '/dashboard',
     meta: { roles: ['admin', 'user'] },
     children: [{
-      path: 'index',
+      path: '/dashboard',
+      name: 'Dashboard',
       component: () => import('@/views/dashboard/index'),
       meta: { title: 'Dashboard', icon: 'dashboard' }
     }]
   },
   {
-    path: '/users',
+    path: '/admin/users',
     component: Layout,
-    hidden: false,
     meta: { roles: ['admin', 'user'] },
     children: [
       {
-        path: 'index',
+        path: '',
         name: 'usersinfo',
         component: () => import('@/views/userinfo/index'),
         meta: { title: '用户信息', icon: 'peoples' }
@@ -118,13 +67,12 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/points',
+    path: '/admin/points',
     component: Layout,
-    hidden: false,
-    meta: { roles: ['admin', 'user'] },
+    meta: { roles: ['admin'] },
     children: [
       {
-        path: 'index',
+        path: '',
         name: 'points',
         component: () => import('@/views/point/index'),
         meta: { title: '服务点信息', icon: 'international' }
@@ -133,13 +81,12 @@ export const asyncRouterMap = [
   },
 
   {
-    path: '/demands',
+    path: '/admin/demands',
     component: Layout,
-    hidden: false,
     meta: { roles: ['admin', 'user'] },
     children: [
       {
-        path: 'index',
+        path: '',
         name: 'demands',
         component: () => import('@/views/demands/index'),
         meta: { title: '需求信息列表', icon: 'documentation' }

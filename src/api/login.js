@@ -15,7 +15,7 @@ export function getInfo(token) {
   return request({
     url: '/admin/info',
     method: 'get',
-    params: { token }
+    data: token
   })
 }
 

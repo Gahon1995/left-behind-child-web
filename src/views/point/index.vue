@@ -88,7 +88,7 @@
     :total="total"
     :size="listQuery.size">
     </el-pagination> -->
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="fetchData" />
+    <pagination v-show="total / listQuery.size > 1" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="fetchData" />
   </div>
 </template>
 

@@ -41,7 +41,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <pagination v-show="total>0" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="fetchUsers" />
+    <pagination v-show="total / listQuery.size > 1" :total="total" :page.sync="listQuery.page" :limit.sync="listQuery.size" @pagination="fetchUsers" />
 
   </div>
 </template>
