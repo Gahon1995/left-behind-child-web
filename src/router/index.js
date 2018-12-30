@@ -21,74 +21,165 @@ import Layout from '../views/layout/Layout'
     icon: 'svg-name'             the icon show in the sidebar,
   }
 **/
-export const constantRouterMap = [
-  { path: '/login', component: () => import('@/views/login/index'), hidden: true },
-  { path: '/404', component: () => import('@/views/404'), hidden: true }
-  // { path: '/', component: () => import('@/views/public/index'), hidden: true }
+export const constantRouterMap = [{
+  path: '/login',
+  component: () => import('@/views/public/login/index'),
+  hidden: true
+},
+{
+  path: '/404',
+  component: () => import('@/views/404'),
+  hidden: true
+}, {
+  path: '/',
+  hidden: true,
+  component: Layout,
+  children: [{
+    path: '',
+    // name: 'dashboard',
+    component: () => import('@/views/public/index'),
+    meta: {
+      title: 'Dashboard',
+      icon: 'dashboard'
+    }
+  }]
+}
 ]
 
 export default new Router({
   // mode: 'history', // require service support
-  scrollBehavior: () => ({ y: 0 }),
+  scrollBehavior: () => ({
+    y: 0
+  }),
   routes: constantRouterMap
 })
 
 // 异步挂载的路由
 // 动态需要根据权限加载的路由表
-export const asyncRouterMap = [
-  {
-    path: '/',
-    component: Layout,
-    name: 'index',
-    redirect: '/dashboard',
-    meta: { roles: ['admin'] },
-    children: [{
-      path: '/dashboard',
-      // name: 'dashboard',
-      component: () => import('@/views/dashboard/index'),
-      meta: { title: 'Dashboard', icon: 'dashboard' }
-    }]
+export const asyncRouterMap = [{
+  path: '/dashboard',
+  component: Layout,
+  // redirect: '/dashboard',
+  meta: {
+    roles: ['admin', 'user']
   },
-  {
-    path: '/admin/users',
-    component: Layout,
-    meta: { roles: ['admin'] },
-    children: [
-      {
-        path: '',
-        name: 'usersinfo',
-        component: () => import('@/views/userinfo/index'),
-        meta: { title: '用户信息', icon: 'peoples' }
-      }
-    ]
+  children: [{
+    path: '',
+    // name: 'dashboard',
+    component: () => import('@/views/public/dashboard/index'),
+    meta: {
+      title: 'Dashboard',
+      icon: 'dashboard'
+    }
+  }]
+},
+{
+  path: '/admin/users',
+  component: Layout,
+  meta: {
+    roles: ['admin']
   },
+  children: [{
+    path: '',
+    name: 'usersinfo',
+    component: () => import('@/views/admin/userinfo/index'),
+    meta: {
+      title: '用户信息',
+      icon: 'peoples'
+    }
+  }]
+},
 
-  {
-    path: '/admin/points',
-    component: Layout,
-    meta: { roles: ['admin'] },
-    children: [
-      {
-        path: '',
-        name: 'points',
-        component: () => import('@/views/point/index'),
-        meta: { title: '服务点信息', icon: 'international' }
-      }
-    ]
+{
+  path: '/admin/points',
+  component: Layout,
+  meta: {
+    roles: ['admin']
   },
+  children: [{
+    path: '',
+    name: 'points',
+    component: () => import('@/views/admin/point/index'),
+    meta: {
+      title: '服务点信息',
+      icon: 'international'
+    }
+  }]
+},
 
-  {
-    path: '/admin/demands',
-    component: Layout,
-    meta: { roles: ['admin'] },
-    children: [
-      {
-        path: '',
-        name: 'demands',
-        component: () => import('@/views/demands/index'),
-        meta: { title: '需求信息列表', icon: 'documentation' }
-      }
-    ]
+{
+  path: '/admin/demands',
+  component: Layout,
+  meta: {
+    roles: ['admin']
   },
-  { path: '*', redirect: '/404', hidden: true }
+  children: [{
+    path: '',
+    name: 'demands',
+    component: () => import('@/views/admin/demands/index'),
+    meta: {
+      title: '需求信息列表',
+      icon: 'documentation'
+    }
+  }]
+},
+{
+  path: '/user/info',
+  component: Layout,
+  meta: {
+    roles: ['user']
+  },
+  children: [{
+    path: '',
+    name: 'userinfo',
+    component: () => import('@/views/user/userinfo/index'),
+    meta: {
+      title: '个人信息',
+      icon: 'documentation'
+    }
+  }]
+},
+{
+  path: '/user/points',
+  component: Layout,
+  meta: {
+    title: '服务点管理',
+    icon: 'documentation',
+    roles: ['user']
+  },
+  children: [{
+    path: '',
+    name: 'userpoints',
+    component: () => import('@/views/user/points/index'),
+    meta: {
+      title: '服务点列表',
+      icon: 'documentation'
+    }
+  },
+  {
+    path: 'create',
+    name: 'create',
+    component: () => import('@/views/user/points/create'),
+    meta: {
+      title: '申请服务点',
+      icon: 'documentation'
+    }
+  },
+  {
+    path: 'edit/:id(\\d+)',
+    component: () => import('@/views/user/points/edit'),
+    hidden: true,
+    name: 'edit',
+    meta: {
+      title: '编辑服务点',
+      icon: 'documentation'
+    }
+  }
+  ]
+},
+{
+  path: '*',
+  redirect: '/404',
+  hidden: true
+}
 ]

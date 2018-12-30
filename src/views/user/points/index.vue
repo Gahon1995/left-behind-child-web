@@ -4,6 +4,7 @@
       v-loading="listLoading"
       :data="list"
       :default-sort="{prop: 'id', order: 'enscending'}"
+      :row-class-name="tableRowClassName"
       element-loading-text="Loading"
       border
       fit
@@ -65,9 +66,11 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column label="操作" width="150" fixed="right" style="padding-right: 0px">
         <template slot-scope="scope">
-          <el-button size="mini" type="primary" @click="handleEdit(scope.row)">审核</el-button>
+          <router-link :to="'/user/points/edit/'+scope.row.pid">
+            <el-button type="primary" size="mini">更改</el-button>
+          </router-link>
           <el-button size="mini" type="danger" @click="handleDelete(scope.row)">删除</el-button>
         </template>
       </el-table-column>
@@ -108,7 +111,7 @@
 </template>
 
 <script>
-import { getPoints, updatePoint, deletePoint } from '@/api/point'
+import { getPoints, updatePoint, deletePoint } from '@/api/user/point'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -238,7 +241,25 @@ export default {
           })
         }
       })
+    },
+    tableRowClassName({ row, rowIndex }) {
+      if (row.state === -1) {
+        return 'warning-row'
+      } else if (row.state === 1) {
+        return 'success-row'
+      }
+      return ''
     }
   }
 }
 </script>
+
+<style>
+.el-table .warning-row {
+  background: oldlace;
+}
+
+.el-table .success-row {
+  background: #f0f9eb;
+}
+</style>

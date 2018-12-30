@@ -1,5 +1,5 @@
 <template>
-  <el-scrollbar wrap-class="scrollbar-wrapper">
+  <el-scrollbar v-if="login === true" wrap-class="scrollbar-wrapper">
     <el-menu
       :show-timeout="200"
       :default-active="$route.path"
@@ -9,7 +9,12 @@
       text-color="#bfcbd9"
       active-text-color="#409EFF"
     >
-      <sidebar-item v-for="route in permission_routers" :key="route.path" :item="route" :base-path="route.path"/>
+      <sidebar-item
+        v-for="route in permission_routers"
+        :key="route.path"
+        :item="route"
+        :base-path="route.path"
+      />
     </el-menu>
   </el-scrollbar>
 </template>
@@ -22,7 +27,8 @@ export default {
   computed: {
     ...mapGetters([
       'permission_routers',
-      'sidebar'
+      'sidebar',
+      'login'
     ]),
     isCollapse() {
       return !this.sidebar.opened
