@@ -10,6 +10,13 @@ export function getPoints(query) {
   })
 }
 
+export function getPointList() {
+  return request({
+    url: base_points + '/list',
+    method: 'get'
+  })
+}
+
 export function getOnePoint(pid) {
   console.log(pid)
   return request({

@@ -30,7 +30,8 @@ export const constantRouterMap = [{
   path: '/404',
   component: () => import('@/views/404'),
   hidden: true
-}, {
+},
+{
   path: '/',
   hidden: true,
   component: Layout,
@@ -102,7 +103,7 @@ export const asyncRouterMap = [{
     component: () => import('@/views/admin/point/index'),
     meta: {
       title: '服务点信息',
-      icon: 'international'
+      icon: 'point'
     }
   }]
 },
@@ -119,23 +120,7 @@ export const asyncRouterMap = [{
     component: () => import('@/views/admin/demands/index'),
     meta: {
       title: '需求信息列表',
-      icon: 'documentation'
-    }
-  }]
-},
-{
-  path: '/user/info',
-  component: Layout,
-  meta: {
-    roles: ['user']
-  },
-  children: [{
-    path: '',
-    name: 'userinfo',
-    component: () => import('@/views/user/userinfo/index'),
-    meta: {
-      title: '个人信息',
-      icon: 'documentation'
+      icon: 'demand'
     }
   }]
 },
@@ -144,7 +129,7 @@ export const asyncRouterMap = [{
   component: Layout,
   meta: {
     title: '服务点管理',
-    icon: 'documentation',
+    icon: 'point',
     roles: ['user']
   },
   children: [{
@@ -152,30 +137,48 @@ export const asyncRouterMap = [{
     name: 'userpoints',
     component: () => import('@/views/user/points/index'),
     meta: {
-      title: '服务点列表',
-      icon: 'documentation'
+      title: '我的服务点',
+      icon: 'point'
     }
   },
   {
     path: 'create',
-    name: 'create',
+    name: 'pointcreate',
     component: () => import('@/views/user/points/create'),
     meta: {
       title: '申请服务点',
-      icon: 'documentation'
+      icon: 'apply'
     }
   },
   {
     path: 'edit/:id(\\d+)',
     component: () => import('@/views/user/points/edit'),
     hidden: true,
-    name: 'edit',
+    name: 'pointedit',
     meta: {
       title: '编辑服务点',
       icon: 'documentation'
     }
   }
   ]
+},
+{
+  path: '/user/demands',
+  component: Layout,
+  meta: {
+    title: '需求管理',
+    icon: 'demand',
+    roles: ['user']
+  },
+  children: [{
+    path: '',
+    name: 'userdemands',
+    component: () => import('@/views/user/demands/index'),
+    meta: {
+      title: '我的需求',
+      icon: 'demand'
+    }
+  }]
 },
 {
   path: '*',

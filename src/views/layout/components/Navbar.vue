@@ -9,20 +9,59 @@
       <breadcrumb/>
     </template>
     <div class="right-menu">
-      <router-link :to="'/'">
-        <div class="theme-switch right-menu-item">主页</div>
-      </router-link>
-      <template v-if="login === false">
-        <router-link :to="'/login'">
-          <div class="theme-switch right-menu-item">登录/注册</div>
+      <template v-if="device!=='mobile'">
+        <router-link :to="'/'">
+          <div class="theme-switch right-menu-item">主页</div>
         </router-link>
-      </template>
-      <template v-else>
-        <router-link class="theme-switch right-menu-item" to="/dashboard">
-          <div>个人中心</div>
-        </router-link>
+        <template v-if="login === false">
+          <router-link :to="'/login'">
+            <div class="theme-switch right-menu-item">登录/注册</div>
+          </router-link>
+        </template>
+        <template v-else>
+          <router-link class="theme-switch right-menu-item" to="/dashboard">
+            <div>个人中心</div>
+          </router-link>
 
-        <div class="theme-switch right-menu-item" @click="logout">退出</div>
+          <a class="theme-switch right-menu-item" style="margin-right: 40px" @click="logout">退出</a>
+        </template>
+      </template>
+
+      <template v-else>
+        <el-dropdown class="avatar-container right-menu-item" trigger="click">
+          <div class="avatar-wrapper">
+            <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+            <i class="el-icon-caret-bottom"/>
+          </div>
+          <el-dropdown-menu slot="dropdown">
+            <router-link :to="'/'">
+              <el-dropdown-item>
+                <div class="theme-switch right-menu-item">主页</div>
+              </el-dropdown-item>
+            </router-link>
+            <template v-if="login === false">
+              <el-dropdown-item>
+                <router-link :to="'/login'">
+                  <div class="theme-switch right-menu-item">登录/注册</div>
+                </router-link>
+              </el-dropdown-item>
+            </template>
+            <template v-else>
+              <el-dropdown-item divided>
+                <router-link class="theme-switch right-menu-item" to="/dashboard">
+                  <div>个人中心</div>
+                </router-link>
+              </el-dropdown-item>
+              <el-dropdown-item divided>
+                <span
+                  class="theme-switch right-menu-item"
+                  style="margin-right: 40px"
+                  @click="logout"
+                >退出</span>
+              </el-dropdown-item>
+            </template>
+          </el-dropdown-menu>
+        </el-dropdown>
       </template>
       <!-- <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -53,11 +92,7 @@ export default {
     Hamburger
   },
   computed: {
-    ...mapGetters([
-      'sidebar',
-      'avatar',
-      'login'
-    ])
+    ...mapGetters(['sidebar', 'avatar', 'login', 'device'])
   },
   methods: {
     toggleSideBar() {
@@ -128,4 +163,3 @@ export default {
   }
 }
 </style>
-

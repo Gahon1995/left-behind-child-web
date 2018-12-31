@@ -1,14 +1,18 @@
 import store from '@/store'
 
-const { body } = document
-const WIDTH = 1024
+const {
+  body
+} = document
+const WIDTH = 720
 const RATIO = 3
 
 export default {
   watch: {
     $route(route) {
       if (this.device === 'mobile' && this.sidebar.opened) {
-        store.dispatch('CloseSideBar', { withoutAnimation: false })
+        store.dispatch('CloseSideBar', {
+          withoutAnimation: false
+        })
       }
     }
   },
@@ -19,7 +23,9 @@ export default {
     const isMobile = this.isMobile()
     if (isMobile) {
       store.dispatch('ToggleDevice', 'mobile')
-      store.dispatch('CloseSideBar', { withoutAnimation: true })
+      store.dispatch('CloseSideBar', {
+        withoutAnimation: true
+      })
     }
   },
   methods: {
@@ -33,7 +39,9 @@ export default {
         store.dispatch('ToggleDevice', isMobile ? 'mobile' : 'desktop')
 
         if (isMobile) {
-          store.dispatch('CloseSideBar', { withoutAnimation: true })
+          store.dispatch('CloseSideBar', {
+            withoutAnimation: true
+          })
         }
       }
     }

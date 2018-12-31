@@ -4,7 +4,7 @@
       ref="postForm"
       :model="postForm"
       :rules="rules"
-      label-width="100px"
+      label-width="120px"
       style="width: 600px"
     >
       <div class="createPost-main-container">
@@ -30,7 +30,7 @@
             placeholder="请输入地址"
           />
         </el-form-item>
-        <div align="center">
+        <div align="center" style="margin-top: 20px">
           <router-link :to="'/user/points'">
             <el-button type="primary" style="margin-right: 20px">取消</el-button>
           </router-link>
@@ -78,10 +78,18 @@ export default {
       tempRoute: {},
       user: {},
       rules: {
-        title: [{ required: true, message: '请选择审核结果', trigger: 'change' }],
-        city: [{ required: true, message: '请选择审核结果', trigger: 'change' }],
-        address: [{ required: true, message: '请选择审核结果', trigger: 'change' }],
-        describe: [{ required: true, message: '请选择审核结果', trigger: 'change' }]
+        title: [
+          { required: true, message: '请选择审核结果', trigger: 'change' }
+        ],
+        city: [
+          { required: true, message: '请选择审核结果', trigger: 'change' }
+        ],
+        address: [
+          { required: true, message: '请选择审核结果', trigger: 'change' }
+        ],
+        describe: [
+          { required: true, message: '请选择审核结果', trigger: 'change' }
+        ]
       }
     }
   },
@@ -101,18 +109,25 @@ export default {
   },
   methods: {
     fetchData(pid) {
-      getOnePoint(pid).then(response => {
-        this.postForm = response.data
-        const code1 = TextToCode[this.postForm.province + ''].code
-        const code2 = TextToCode[this.postForm.province + ''][this.postForm.city + ''].code
-        const code3 = TextToCode[this.postForm.province + ''][this.postForm.city + ''][this.postForm.district + ''].code
-        console.log(this.postForm.city)
-        console.log(code2)
-        this.selectedOptions = [code1, code2, code3]
-        console.log(this.selectedOptions)
-      }).catch(err => {
-        console.log(err)
-      })
+      getOnePoint(pid)
+        .then(response => {
+          this.postForm = response.data
+          const code1 = TextToCode[this.postForm.province + ''].code
+          const code2 =
+            TextToCode[this.postForm.province + ''][this.postForm.city + '']
+              .code
+          const code3 =
+            TextToCode[this.postForm.province + ''][this.postForm.city + ''][
+              this.postForm.district + ''
+            ].code
+          console.log(this.postForm.city)
+          console.log(code2)
+          this.selectedOptions = [code1, code2, code3]
+          console.log(this.selectedOptions)
+        })
+        .catch(err => {
+          console.log(err)
+        })
     },
     handleChange(value) {
       // postForm.province = value
@@ -127,24 +142,26 @@ export default {
         if (valid) {
           const tempData = Object.assign({}, this.postForm)
           this.loading = true
-          updatePoint(tempData).then(() => {
-            this.$notify({
-              title: '成功',
-              message: '成功发起申请',
-              type: 'success',
-              duration: 2000
+          updatePoint(tempData)
+            .then(() => {
+              this.$notify({
+                title: '成功',
+                message: '成功发起申请',
+                type: 'success',
+                duration: 2000
+              })
+              this.$router.push({ path: '/user/points' })
+              this.loading = false
             })
-            this.$router.push({ path: '/user/points' })
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-            // this.$notify({
-            //   title: '失败',
-            //   message: '更新数据失败，请检查后端状态',
-            //   type: 'error',
-            //   duration: 2000
-            // })
-          })
+            .catch(() => {
+              this.loading = false
+              // this.$notify({
+              //   title: '失败',
+              //   message: '更新数据失败，请检查后端状态',
+              //   type: 'error',
+              //   duration: 2000
+              // })
+            })
         } else {
           console.log('error submit!!')
           return false
@@ -184,5 +201,8 @@ export default {
     right: -10px;
     top: 0px;
   }
+}
+.el-form-item {
+  margin-bottom: 20px;
 }
 </style>
