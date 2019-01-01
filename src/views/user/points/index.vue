@@ -33,10 +33,10 @@
       <el-table-column label="详细地址" width="110" align="center">
         <template slot-scope="scope">{{ scope.row.address }}</template>
       </el-table-column>
-      <el-table-column label="经度" width="80" align="center">
+      <el-table-column label="纬度" width="80" align="center">
         <template slot-scope="scope">{{ scope.row.lat }}</template>
       </el-table-column>
-      <el-table-column label="纬度" width="80" align="center">
+      <el-table-column label="经度" width="80" align="center">
         <template slot-scope="scope">{{ scope.row.lng }}</template>
       </el-table-column>
       <el-table-column label="服务点描述" align="center">
@@ -189,56 +189,62 @@ export default {
         cancelButtonText: '取消',
         type: 'warning',
         center: true
-      }).then(() => {
-        deletePoint(row.pid).then(() => {
-          this.$notify({
-            title: '成功',
-            message: '删除成功',
-            type: 'success',
-            duration: 1000
-          })
-          const index = this.list.indexOf(row)
-          this.list.splice(index, 1)
-        }).catch(() => {
-          this.formVisible = false
-          // this.$notify({
-          //   title: '失败',
-          //   message: '删除数据失败，请检查后台状态',
-          //   type: 'error',
-          //   duration: 2000
-          // })
+      })
+        .then(() => {
+          deletePoint(row.pid)
+            .then(() => {
+              this.$notify({
+                title: '成功',
+                message: '删除成功',
+                type: 'success',
+                duration: 1000
+              })
+              const index = this.list.indexOf(row)
+              this.list.splice(index, 1)
+            })
+            .catch(() => {
+              this.formVisible = false
+              // this.$notify({
+              //   title: '失败',
+              //   message: '删除数据失败，请检查后台状态',
+              //   type: 'error',
+              //   duration: 2000
+              // })
+            })
         })
-      }).catch(() => { })
+        .catch(() => {})
     },
     updateData() {
-      this.$refs['dataForm'].validate((valid) => {
+      this.$refs['dataForm'].validate(valid => {
         if (valid) {
           const tempData = Object.assign({}, this.temp)
           // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-          updatePoint(tempData).then(() => {
-            for (const v of this.list) {
-              if (v.pid === this.temp.pid) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
+          updatePoint(tempData)
+            .then(() => {
+              for (const v of this.list) {
+                if (v.pid === this.temp.pid) {
+                  const index = this.list.indexOf(v)
+                  this.list.splice(index, 1, this.temp)
+                  break
+                }
               }
-            }
-            this.formVisible = false
-            this.$notify({
-              title: '成功',
-              message: '更新成功',
-              type: 'success',
-              duration: 1000
+              this.formVisible = false
+              this.$notify({
+                title: '成功',
+                message: '更新成功',
+                type: 'success',
+                duration: 1000
+              })
             })
-          }).catch(() => {
-            this.formVisible = false
-            // this.$notify({
-            //   title: '失败',
-            //   message: '更新数据失败，请检查后端状态',
-            //   type: 'error',
-            //   duration: 2000
-            // })
-          })
+            .catch(() => {
+              this.formVisible = false
+              // this.$notify({
+              //   title: '失败',
+              //   message: '更新数据失败，请检查后端状态',
+              //   type: 'error',
+              //   duration: 2000
+              // })
+            })
         }
       })
     },

@@ -5,7 +5,7 @@ import 'nprogress/nprogress.css' // Progress 进度条样式
 // import { Message } from 'element-ui'
 // import { getToken } from '@/utils/auth' // 验权
 
-const whiteList = ['/login', '/404', '/'] // 不重定向白名单
+const whiteList = ['/login', '/404', '/', '/list', ''] // 不重定向白名单
 router.beforeEach((to, from, next) => {
   if (to.path !== '/login' && whiteList.indexOf(to.path) !== -1) { // 在免登录白名单，直接进入
     next()

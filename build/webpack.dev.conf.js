@@ -36,9 +36,12 @@ const devWebpackConfig = merge(baseWebpackConfig, {
     host: HOST || config.dev.host,
     port: PORT || config.dev.port,
     open: config.dev.autoOpenBrowser,
-    overlay: config.dev.errorOverlay
-      ? { warnings: false, errors: true }
-      : false,
+    overlay: config.dev.errorOverlay ?
+      {
+        warnings: false,
+        errors: true
+      } :
+      false,
     publicPath: config.dev.assetsPublicPath,
     proxy: config.dev.proxyTable,
     quiet: true, // necessary for FriendlyErrorsPlugin
@@ -57,7 +60,7 @@ const devWebpackConfig = merge(baseWebpackConfig, {
       template: 'index.html',
       inject: true,
       favicon: resolve('favicon.ico'),
-      title: 'vue-admin-template'
+      title: '留守儿童援助系统web设计'
     })
   ]
 })
@@ -83,9 +86,9 @@ module.exports = new Promise((resolve, reject) => {
               }:${port}`
             ]
           },
-          onErrors: config.dev.notifyOnErrors
-            ? utils.createNotifierCallback()
-            : undefined
+          onErrors: config.dev.notifyOnErrors ?
+            utils.createNotifierCallback() :
+            undefined
         })
       )
 

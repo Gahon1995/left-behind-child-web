@@ -39,3 +39,11 @@ export function deletePoint() {
     method: 'delete'
   })
 }
+
+export function getLngLat(query) {
+  return request({
+    url: 'http://api.map.baidu.com/geocoder/v2/',
+    method: 'get',
+    params: query
+  })
+}

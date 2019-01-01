@@ -27,6 +27,21 @@ export const constantRouterMap = [{
   hidden: true
 },
 {
+  path: '/list',
+  hidden: true,
+  component: Layout,
+  children: [{
+    path: '',
+    // name: 'dashboard',
+    component: () => import('@/views/public/list'),
+    meta: {
+      title: '需求列表',
+      icon: 'demand'
+    }
+  }]
+
+},
+{
   path: '/404',
   component: () => import('@/views/404'),
   hidden: true
@@ -40,7 +55,7 @@ export const constantRouterMap = [{
     // name: 'dashboard',
     component: () => import('@/views/public/index'),
     meta: {
-      title: 'Dashboard',
+      title: '主页',
       icon: 'dashboard'
     }
   }]

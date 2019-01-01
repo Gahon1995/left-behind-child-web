@@ -1,6 +1,6 @@
 <template>
   <div style="position: relative; margin: 20px 40px; word-break: break-all;">
-    <el-row style="margin-bottom: 20px">
+    <el-row style="margin-bottom: 20px；max-width: 1000px; margin-bottom: 20px;">
       <el-button type="primary" @click="isEdit=true,editVisible = true">添加新需求</el-button>
     </el-row>
     <el-row :gutter="40">
@@ -11,7 +11,7 @@
         :sm="24"
         :md="12"
         :key="index"
-        style="margin-bottom:20px;"
+        style="margin-bottom: 20px;"
       >
         <el-card class="box-card">
           <div slot="header" class="clearfix">
@@ -26,39 +26,41 @@
           <el-form label-width="90px">
             <el-row>
               <el-col :span="12">
-                <el-form-item label="发起人:">
+                <el-form-item label="发起人:" class="user-demand-item">
                   <div>{{ demand.ownerName }}</div>
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="联系电话:">
+                <el-form-item label="联系电话:" class="user-demand-item">
                   <div>{{ demand.ownerPhone }}</div>
                 </el-form-item>
               </el-col>
             </el-row>
-
-            <el-form-item label="需求详情:">
+            <el-form-item label="地址:" class="user-demand-item">
+              <div>{{ demand.province }}&nbsp;{{ demand.city }}&nbsp;{{ demand.district }}&nbsp;{{ demand.address }}</div>
+            </el-form-item>
+            <el-form-item label="需求详情:" class="user-demand-item">
               <div>{{ demand.detail }}</div>
             </el-form-item>
-            <el-form-item label="申请时间:">
+            <el-form-item label="申请时间:" class="user-demand-item">
               <div>{{ demand.createTime }}</div>
             </el-form-item>
             <div v-if="demand.helperName !== ''">
               <el-row>
                 <el-col :span="12">
-                  <el-form-item label="帮扶人:">
+                  <el-form-item label="帮扶人:" class="user-demand-item">
                     <div>{{ demand.helperName }}</div>
                   </el-form-item>
                 </el-col>
                 <el-col :span="12">
-                  <el-form-item label="联系方式:">
+                  <el-form-item label="联系方式:" class="user-demand-item">
                     <div>{{ demand.helperPhone }}</div>
                   </el-form-item>
                 </el-col>
               </el-row>
             </div>
             <div v-else>
-              <el-form-item label="帮扶人:">暂无人申请</el-form-item>
+              <el-form-item label="帮扶人:" class="user-demand-item">暂无人申请</el-form-item>
             </div>
           </el-form>
           <el-row align="center">
@@ -91,8 +93,8 @@
       title="需求编辑"
       style="margin: auto; width: 100%; max-width: 1000px"
     >
-      <el-form ref="dataForm" :model="temp" align="left" label-width="100px">
-        <el-form-item label="服务点选择:">
+      <el-form ref="dataForm" :model="temp" :rules="rules" align="left" label-width="100px">
+        <el-form-item label="服务点选择:" required prop="pid">
           <el-select v-model="temp.pid" placeholder="请选择">
             <el-option
               v-for="point in pointlist"
@@ -102,7 +104,7 @@
             />
           </el-select>
         </el-form-item>
-        <el-form-item label="需求描述:">
+        <el-form-item label="需求描述:" required prop="detail">
           <el-input
             v-model="temp.detail"
             :autosize="{ minRows: 2, maxRows: 4}"
@@ -161,7 +163,17 @@ export default {
         detail: null,
         did: null,
         pid: null,
-        status: -2
+        status: -2,
+        province: null,
+        city: null,
+        district: null,
+        address: null,
+        lat: 0,
+        lng: 0
+      },
+      rules: {
+        pid: [{ required: true, trigger: 'change' }],
+        detail: [{ required: true, trigger: 'change' }]
       }
     }
   },
@@ -223,42 +235,50 @@ export default {
         .catch(() => {})
     },
     updateData() {
-      const tempData = Object.assign({}, this.temp)
-      // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
-      updateDemand(tempData)
-        .then(() => {
-          if (this.isEdit) {
-            for (const v of this.list) {
-              if (v.did === this.temp.did) {
-                const index = this.list.indexOf(v)
-                this.list.splice(index, 1, this.temp)
-                break
+      this.$refs.dataForm.validate(valid => {
+        if (valid) {
+          const tempData = Object.assign({}, this.temp)
+          tempData.status = 0
+          // tempData.timestamp = +new Date(tempData.timestamp) // change Thu Nov 30 2017 16:41:05 GMT+0800 (CST) to 1512031311464
+          updateDemand(tempData)
+            .then(() => {
+              if (this.isEdit) {
+                for (const v of this.list) {
+                  if (v.did === this.temp.did) {
+                    const index = this.list.indexOf(v)
+                    this.list.splice(index, 1, this.temp)
+                    break
+                  }
+                }
+                this.fetchDemads()
+                this.isEdit = false
+                this.editVisible = false
+                this.temp.pid = null
+                this.temp.did = null
+                this.temp.detail = null
               }
-            }
-            this.fetchDemads()
-            this.isEdit = false
-            this.editVisible = false
-            this.temp.pid = null
-            this.temp.did = null
-            this.temp.detail = null
-          }
-          this.$notify({
-            title: '成功',
-            message: '更新成功',
-            type: 'success',
-            duration: 1000
-          })
-        })
-        .catch(() => {
-          this.isEdit = false
-          this.editVisible = false
-          // this.$notify({
-          //   title: '失败',
-          //   message: '更新数据失败，请检查后端状态',
-          //   type: 'error',
-          //   duration: 2000
-          // })
-        })
+              this.$notify({
+                title: '成功',
+                message: '更新成功',
+                type: 'success',
+                duration: 1000
+              })
+            })
+            .catch(() => {
+              this.isEdit = false
+              this.editVisible = false
+              // this.$notify({
+              //   title: '失败',
+              //   message: '更新数据失败，请检查后端状态',
+              //   type: 'error',
+              //   duration: 2000
+              // })
+            })
+        } else {
+          console.log('error submit!!')
+          return false
+        }
+      })
     }
   }
 }
@@ -266,11 +286,14 @@ export default {
 
 <style>
 .text {
-  font-size: 16px;
+  /* font-size: 16px; */
 }
 
 .item {
-  margin-bottom: 18px;
+  margin-bottom: 0px;
+}
+.user-demand-item {
+  margin-bottom: 0px;
 }
 .item-name {
   font-weight: bold;
@@ -279,12 +302,12 @@ export default {
   margin-bottom: 0px;
 } */
 .el-form-item label {
-  font-size: 16px;
+  /* font-size: 16px; */
   color: #303133;
   font-weight: bold;
 }
 .el-form-item__content {
-  font-size: 16px;
+  /* font-size: 16px; */
 }
 .clearfix:before,
 .clearfix:after {
@@ -295,7 +318,8 @@ export default {
   clear: both;
 }
 
-/* .box-card {
-  height: 300px;
-} */
+.box-card {
+  /* height: 500px; */
+  overflow: auto;
+}
 </style>

@@ -79,17 +79,22 @@ export default {
       user: {},
       rules: {
         title: [
-          { required: true, message: '请选择审核结果', trigger: 'change' }
+          { required: true, message: '请填写服务点名称', trigger: 'change' }
         ],
-        city: [
-          { required: true, message: '请选择审核结果', trigger: 'change' }
-        ],
+        options: [{ required: true, message: '请选择城市', trigger: 'change' }],
         address: [
-          { required: true, message: '请选择审核结果', trigger: 'change' }
+          { required: true, message: '请填写详细地址', trigger: 'change' }
         ],
         describe: [
-          { required: true, message: '请选择审核结果', trigger: 'change' }
+          { required: true, message: '请对该服务点进行描述', trigger: 'change' }
         ]
+      },
+      lat_lng: {
+        address: null,
+        city: null,
+        ak: '7r4z0jRBjmWAsODDBhtwsEy5DubCHOHF',
+        output: 'json',
+        callback: null
       }
     }
   },
@@ -140,8 +145,9 @@ export default {
       console.log(this.postForm)
       this.$refs.postForm.validate(valid => {
         if (valid) {
-          const tempData = Object.assign({}, this.postForm)
           this.loading = true
+          const tempData = Object.assign({}, this.postForm)
+          tempData.state = 0
           updatePoint(tempData)
             .then(() => {
               this.$notify({

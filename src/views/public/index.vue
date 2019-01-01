@@ -1,3 +1,3 @@
 <template>
-  <div>这个是我们的主页面</div>
+  <h1>这个是我们的主页</h1>
 </template>

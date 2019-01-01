@@ -13,6 +13,9 @@
         <router-link :to="'/'">
           <div class="theme-switch right-menu-item">主页</div>
         </router-link>
+        <router-link :to="'/list'">
+          <div class="theme-switch right-menu-item">需求列表</div>
+        </router-link>
         <template v-if="login === false">
           <router-link :to="'/login'">
             <div class="theme-switch right-menu-item">登录/注册</div>
@@ -38,6 +41,9 @@
               <el-dropdown-item>
                 <div class="theme-switch right-menu-item">主页</div>
               </el-dropdown-item>
+            </router-link>
+            <router-link :to="'/list'">
+              <div class="theme-switch right-menu-item">需求列表</div>
             </router-link>
             <template v-if="login === false">
               <el-dropdown-item>

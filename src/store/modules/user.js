@@ -50,6 +50,7 @@ const user = {
         login(username, userInfo.password).then(response => {
           const data = response.data
           setToken(data.token)
+          commit('SET_LOGIN', true)
           commit('SET_TOKEN', data.token)
           resolve()
         }).catch(error => {
