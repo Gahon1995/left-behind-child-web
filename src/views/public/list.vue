@@ -14,21 +14,20 @@
         <el-card class="box-card">
           <div slot="header" class="clearfix">
             <span style="font-weight: bold;font-size: 24px;color: #f44336">{{ demand.pointName }}</span>
-            <el-tooltip :content="demand.reviewApplyDetail" effect="dark" placement="bottom">
-              <el-tag
-                v-if="demand.helpState === 1 || demand.helpState === 0"
-                type="success"
-                style="float: right;"
-              >{{ demand.helpState | statusNameFilter }}</el-tag>
-              <el-button
-                v-else
-                type="primary"
-                style="float: right;"
-                round
-                size="small"
-                @click="ApplyDemand(demand)"
-              >申请帮扶</el-button>
-            </el-tooltip>
+
+            <el-tag
+              v-if="demand.helpState === 1 || demand.helpState === 0"
+              type="success"
+              style="float: right;"
+            >{{ demand.helpState | statusNameFilter }}</el-tag>
+            <el-button
+              v-else
+              type="primary"
+              style="float: right;"
+              round
+              size="small"
+              @click="ApplyDemand(demand)"
+            >申请帮扶</el-button>
           </div>
           <div>
             <el-form label-width="90px" style="height: 0px;line-height: 0px;">
