@@ -18,9 +18,15 @@
             <span style="font-weight: bold;font-size: 24px;color: #f44336">{{ demand.pointName }}</span>
             <el-tooltip :content="demand.reviewApplyDetail" effect="dark" placement="bottom">
               <el-tag
+                v-if="demand.hid != user.uid"
                 :type="demand.status | statusColorFilter"
                 style="float: right;"
-              >{{ demand.status | statusNameFilter }}</el-tag>
+              >需求 {{ demand.status | statusNameFilter }}</el-tag>
+              <el-tag
+                v-else
+                :type="demand.helpState | statusColorFilter"
+                style="float: right;"
+              >申请 {{ demand.helpState | statusNameFilter }}</el-tag>
             </el-tooltip>
           </div>
           <el-form label-width="90px">
@@ -66,13 +72,13 @@
           <el-row align="center">
             <el-button
               type="primary"
-              style="float: right; margin: 20px 10px 0px"
+              style="float: right; margin-right: 20px;"
               @click="handleEdit(demand)"
             >编辑</el-button>
 
             <el-button
               type="danger"
-              style="float: right; margin: 20px 10px 0px"
+              style="float: right;margin-right: 20px;"
               @click="handleDelete(demand.did)"
             >删除</el-button>
           </el-row>
@@ -124,6 +130,7 @@
 <script>
 import { getDemands, deleteDemand, updateDemand } from '@/api/user/demand.js'
 import { getPointList } from '@/api/user/point.js'
+import { mapGetters } from 'vuex'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
@@ -176,6 +183,9 @@ export default {
         detail: [{ required: true, trigger: 'change' }]
       }
     }
+  },
+  computed: {
+    ...mapGetters(['login', 'user'])
   },
   created() {
     this.fetchDemads()
@@ -285,9 +295,9 @@ export default {
 </script>
 
 <style>
-.text {
-  /* font-size: 16px; */
-}
+/* .text {
+  font-size: 16px;
+} */
 
 .item {
   margin-bottom: 0px;
@@ -306,9 +316,9 @@ export default {
   color: #303133;
   font-weight: bold;
 }
-.el-form-item__content {
-  /* font-size: 16px; */
-}
+/* .el-form-item__content {
+  font-size: 16px;
+} */
 .clearfix:before,
 .clearfix:after {
   display: table;

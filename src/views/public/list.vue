@@ -16,9 +16,18 @@
             <span style="font-weight: bold;font-size: 24px;color: #f44336">{{ demand.pointName }}</span>
             <el-tooltip :content="demand.reviewApplyDetail" effect="dark" placement="bottom">
               <el-tag
-                :type="demand.helpState | statusColorFilter"
+                v-if="demand.helpState === 1 || demand.helpState === 0"
+                type="success"
                 style="float: right;"
               >{{ demand.helpState | statusNameFilter }}</el-tag>
+              <el-button
+                v-else
+                type="primary"
+                style="float: right;"
+                round
+                size="small"
+                @click="ApplyDemand(demand)"
+              >申请帮扶</el-button>
             </el-tooltip>
           </div>
           <div>
@@ -54,16 +63,39 @@
       :limit.sync="listQuery.size"
       @pagination="fetchDemads"
     />
+
+    <el-dialog
+      :visible.sync="isApply"
+      title="需求申请"
+      style="margin: auto; width: 100%; max-width: 1000px"
+    >
+      <el-form>
+        <el-form-item label="申请说明:" label-width="100px">
+          <el-input
+            v-model="helpDetail"
+            :autosize="{ minRows: 2, maxRows: 4}"
+            type="textarea"
+            placeholder="请输入内容"
+          />
+        </el-form-item>
+      </el-form>
+      <div style="text-align: center;">
+        <el-button @click="isAppky = false">取消</el-button>
+        <el-button type="primary" @click="updateData()">确定</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { getDemands } from '@/api/public.js'
-// import { getPointList } from '@/api/user/point.js'
+import { mapGetters } from 'vuex'
+import { applyDemand } from '@/api/user/demand.js'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
 
 export default {
   components: { Pagination },
+
   filters: {
     statusColorFilter(status) {
       const statusMap = {
@@ -84,9 +116,11 @@ export default {
       return statusMap[status]
     }
   },
+
   data() {
     return {
-      isEdit: false,
+      isApply: false,
+      applyUid: null,
       editVisible: false,
       total: 0,
       list: null,
@@ -96,20 +130,12 @@ export default {
         size: 10
       },
       pointlist: null,
-      temp: {
-        detail: null,
-        did: null,
-        pid: null,
-        status: -2,
-        helpState: 0,
-        province: null,
-        city: null,
-        district: null,
-        address: null,
-        lat: 0,
-        lng: 0
-      }
+      helpDetail: '',
+      temp: {}
     }
+  },
+  computed: {
+    ...mapGetters(['login', 'user'])
   },
   created() {
     this.fetchDemads()
@@ -125,6 +151,51 @@ export default {
       // getPointList().then(response => {
       //   this.pointlist = response.data.list
       // })
+    },
+    ApplyDemand(demand) {
+      if (this.$store.getters.login) {
+        console.log('login')
+        this.applyUid = this.$store.getters.user.uid
+        this.temp = demand
+        this.isApply = true
+        if (this.demand.uid === this.applyUid) {
+          this.$message.error('禁止申请自己发起的需求')
+          return null
+        }
+      } else {
+        this.$message.error('请先登录！')
+        this.isApply = false
+        this.$router.push({ path: '/login' })
+      }
+    },
+    updateData() {
+      if (this.helpDetail === '') {
+        this.$message.error('请输入帮扶说明')
+      } else {
+        this.temp.helpDetail = this.helpDetail
+        const tempData = Object.assign({}, this.temp)
+        tempData.helpState = 0
+        tempData.hid = this.applyUid
+        applyDemand(tempData)
+          .then(() => {
+            this.isApply = false
+            this.$notify({
+              title: '成功',
+              message: '申请成功，请等待审核',
+              type: 'success',
+              duration: 1000
+            })
+          })
+          .catch(() => {
+            this.isApply = false
+            this.$notify({
+              title: '失败',
+              message: '申请失败，请稍后再试',
+              type: 'error',
+              duration: 2000
+            })
+          })
+      }
     }
   }
 }

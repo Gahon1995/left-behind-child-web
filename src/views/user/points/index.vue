@@ -66,7 +66,7 @@
           <span>{{ scope.row.createTime }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" width="150" fixed="right" style="padding-right: 0px">
+      <el-table-column label="操作" width="150" style="padding-right: 0px">
         <template slot-scope="scope">
           <router-link :to="'/user/points/edit/'+scope.row.pid">
             <el-button type="primary" size="mini">更改</el-button>

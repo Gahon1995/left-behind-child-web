@@ -30,3 +30,11 @@ export function deleteDemand(id) {
     method: 'DELETE'
   })
 }
+
+export function applyDemand(data) {
+  return request({
+    url: demands + '/apply',
+    method: 'post',
+    data: data
+  })
+}
