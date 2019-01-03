@@ -1,6 +1,9 @@
 <template>
   <div style="position: relative; margin: 20px 10px;word-break: break-all;">
-    <div style="text-align: center;margin-top: 40px;margin-bottom: 40px;">搜索：</div>
+    <div class="filter-container" style="margin-bottom: 20px;text-align: center">
+      <span>筛选：</span>
+      <el-cascader :options="options" v-model="selectedOptions" @change="handleChange"/>
+    </div>
     <el-row :gutter="40" style="max-width: 1000px; margin: auto;">
       <!--就改这里一行-->
       <el-col
@@ -91,6 +94,7 @@ import { getDemands } from '@/api/public.js'
 import { mapGetters } from 'vuex'
 import { applyDemand } from '@/api/user/demand.js'
 import Pagination from '@/components/Pagination' // Secondary package based on el-pagination
+import { provinceAndCityDataPlus, CodeToText } from 'element-china-area-data'
 
 export default {
   components: { Pagination },
@@ -126,11 +130,15 @@ export default {
       listLoading: true,
       listQuery: {
         page: 1,
-        size: 10
+        size: 10,
+        province: '',
+        city: ''
       },
       pointlist: null,
       helpDetail: '',
-      temp: {}
+      temp: {},
+      options: provinceAndCityDataPlus,
+      selectedOptions: []
     }
   },
   computed: {
@@ -143,6 +151,10 @@ export default {
     fetchDemads() {
       this.listLoading = true
       getDemands(this.listQuery).then(response => {
+        console.log(response.data.list.length)
+        if (response.data.list.length === 0) {
+          this.$message.success('该地区暂无需求')
+        }
         this.list = response.data.list
         this.total = response.data.total
         this.listLoading = false
@@ -157,10 +169,10 @@ export default {
         this.applyUid = this.$store.getters.user.uid
         this.temp = demand
         this.isApply = true
-        if (this.demand.uid === this.applyUid) {
-          this.$message.error('禁止申请自己发起的需求')
-          return null
-        }
+        // if (this.demand.uid === this.applyUid) {
+        //   this.$message.error('禁止申请自己发起的需求')
+        //   return null
+        // }
       } else {
         this.$message.error('请先登录！')
         this.isApply = false
@@ -195,6 +207,14 @@ export default {
             })
           })
       }
+    },
+    handleChange(value) {
+      // postForm.province = value
+      // console.log(value)
+      this.listQuery.province = CodeToText[value[0]]
+      this.listQuery.city = CodeToText[value[1]]
+      // console.log(this.listQuery)
+      this.fetchDemads()
     }
   }
 }
