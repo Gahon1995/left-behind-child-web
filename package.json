@@ -14,7 +14,7 @@
     "svgo": "svgo -f src/icons/svg --config=src/icons/svgo.yml"
   },
   "dependencies": {
-    "axios": "0.19.0",
+    "axios": "1.6.0",
     "element-china-area-data": "^4.1.1",
     "element-ui": "2.4.6",
     "eslint-plugin-html": "^5.0.0",
